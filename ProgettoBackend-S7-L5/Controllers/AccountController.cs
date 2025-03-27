@@ -48,7 +48,7 @@ namespace ProgettoBackend_S7_L5.Controllers
 
             var user = await _userManager.FindByEmailAsync(newUser.Email);
 
-            await _userManager.AddToRoleAsync(newUser, "Admin");
+            await _userManager.AddToRoleAsync(newUser, "Utente");
             
             return Ok();
         }

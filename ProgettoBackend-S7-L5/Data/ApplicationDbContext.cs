@@ -25,6 +25,12 @@ namespace ProgettoBackend_S7_L5.Data
             modelBuilder.Entity<ApplicationUserRole>().HasOne(a => a.ApplicationUser).WithMany(u => u.UserRoles).HasForeignKey(a => a.UserId);
 
             modelBuilder.Entity<ApplicationUserRole>().HasOne(a => a.ApplicationRole).WithMany(r => r.UserRoles).HasForeignKey(a => a.RoleId);
+
+            modelBuilder.Entity<Biglietto>().HasOne(b => b.User).WithMany(u => u.Biglietti).HasForeignKey(b => b.UserId);
+
+            modelBuilder.Entity<Biglietto>().HasOne(b => b.Evento).WithMany(e => e.Biglietti).HasForeignKey(b => b.EventoId);
+
+            modelBuilder.Entity<Evento>().HasOne(e => e.Artista).WithMany(a => a.Eventi).HasForeignKey(e => e.ArtistaId);
         }
     }
 }

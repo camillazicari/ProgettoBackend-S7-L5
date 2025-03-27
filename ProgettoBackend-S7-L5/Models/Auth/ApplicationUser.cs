@@ -11,5 +11,6 @@ namespace ProgettoBackend_S7_L5.Models.Auth
         public required string LastName { get; set; }
 
         public ICollection<ApplicationUserRole> UserRoles { get; set; }
+        public ICollection<Biglietto> Biglietti { get; set; }
     }
 }
