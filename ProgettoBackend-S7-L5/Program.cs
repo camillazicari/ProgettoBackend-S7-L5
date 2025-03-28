@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using Microsoft.OpenApi.Models;
 
 LoggerService.ConfigureLogger();
 
@@ -23,6 +24,33 @@ try
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+
+    builder.Services.AddSwaggerGen(c =>
+    {
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "CustomersManager API", Version = "v1" });
+
+        var securityScheme = new OpenApiSecurityScheme
+        {
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            Scheme = "Bearer",
+            BearerFormat = "JWT",
+            In = ParameterLocation.Header,
+            Description = "Inserisci il token JWT nel formato: Bearer {token}",
+            Reference = new OpenApiReference
+            {
+                Type = ReferenceType.SecurityScheme,
+                Id = "Bearer"
+            }
+        };
+
+        c.AddSecurityDefinition("Bearer", securityScheme);
+        c.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            { securityScheme, new string[] {} }
+        });
+    });
+
 
     builder.Services.Configure<Jwt>(builder.Configuration.GetSection(nameof(Jwt)));
 
@@ -81,16 +109,13 @@ try
     builder.Services.AddScoped<UserManager<ApplicationUser>>();
     builder.Services.AddScoped<SignInManager<ApplicationUser>>();
     builder.Services.AddScoped<RoleManager<ApplicationRole>>();
+    builder.Services.AddScoped<ArtistiService>();
+    builder.Services.AddScoped<EventiService>();
+    builder.Services.AddScoped<BigliettiService>();
 
     builder.Host.UseSerilog();
 
     var app = builder.Build();
-
-    app.UseCors(x =>
-        x.AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-    );
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())

@@ -16,7 +16,7 @@ namespace ProgettoBackend_S7_L5.Models
         [Required]
         public required string Biografia { get; set; }
 
-        public ICollection<Evento> Eventi { get; set; }
+        public ICollection<Evento>? Eventi { get; set; }
 
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using System.Net.Sockets;
 
 namespace ProgettoBackend_S7_L5.Data
 {
@@ -17,6 +18,9 @@ namespace ProgettoBackend_S7_L5.Data
         public DbSet<ApplicationRole> ApplicationRoles { get; set; }
 
         public DbSet<ApplicationUserRole> ApplicationUserRoles { get; set; }
+        public DbSet<Biglietto> Biglietti { get; set; }
+        public DbSet<Evento> Eventi { get; set; }
+        public DbSet<Artista> Artisti { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,6 +35,8 @@ namespace ProgettoBackend_S7_L5.Data
             modelBuilder.Entity<Biglietto>().HasOne(b => b.Evento).WithMany(e => e.Biglietti).HasForeignKey(b => b.EventoId);
 
             modelBuilder.Entity<Evento>().HasOne(e => e.Artista).WithMany(a => a.Eventi).HasForeignKey(e => e.ArtistaId);
+
+            modelBuilder.Entity<Biglietto>().Property(p => p.DataAcquisto).HasDefaultValueSql("GETDATE()").IsRequired(true);
         }
     }
 }
